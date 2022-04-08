@@ -42,12 +42,12 @@ RUN \
 # 目标镜像
 FROM nvidia/cuda:11.3.1-cudnn8-runtime-ubuntu20.04
 
-# Update APT sourece
-RUN sed -i 's/http:\/\/archive/http:\/\/cn.archive/' /etc/apt/sources.list && \
-    rm /etc/apt/sources.list.d/*.list && apt-get update
-
-# Install system env dependences.
-RUN apt-get install --no-install-recommends -y libx264-155 libx265-179
-
 # 拷贝FFMPEG
 COPY --from=builder /build/ffmpeg-build/ /usr/local/
+
+# Update APT sourece
+RUN sed -i 's/http:\/\/archive/http:\/\/cn.archive/' /etc/apt/sources.list && \
+    rm /etc/apt/sources.list.d/*.list && apt-get update && \
+    apt-get install --no-install-recommends -y libx264-155 libx265-179 && \
+    ldconfig
+
