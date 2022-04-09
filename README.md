@@ -1,12 +1,17 @@
 # opencv-docker
 Dockerfiles for OpenCV build.
 
-## Build FFMPEG
+## Build FFMPEG runtime image
 ```bash
-docker build -t yinguobing/ffmpeg:4.3.3 -f ffmpeg .
+docker build -t yinguobing/ffmpeg:4.3.3-runtime-ubuntu20.04 -f ffmpeg .
 ```
 
-## Build FFMPEG with CUDA support
+## Build FFMPEG with CUDA development image
 ```bash
-docker build -t yinguobing/ffmpeg:4.3.3-cuda-11.3.1 -f ffmpeg-cuda .
+docker build -t yinguobing/ffmpeg:4.3.3-cuda_11.3.1-devel-ubuntu20.04 -f ffmpeg-cuda-devel .
+```
+
+## Build FFMPEG with CUDA runtime image
+```bash
+docker build -t yinguobing/ffmpeg:4.3.3-cuda_11.3.1-runtime-ubuntu20.04 -f ffmpeg-cuda-runtime .
 ```
