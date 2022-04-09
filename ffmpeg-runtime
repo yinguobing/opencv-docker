@@ -1,0 +1,17 @@
+# 构建阶段容器
+FROM yinguobing/ffmpeg:4.3.3-devel-ubuntu20.04 as builder
+
+# 目标镜像
+FROM ubuntu:20.04
+LABEL image.authors="https://yinguobing.com"
+
+# 拷贝FFMPEG
+COPY --from=builder /build/ffmpeg-build/ /usr/local/
+
+# Update APT sourece
+RUN sed -i 's/http:\/\/archive/http:\/\/cn.archive/' /etc/apt/sources.list && \
+    apt-get update && apt-get install --no-install-recommends -y \
+    libx264-155 \
+    libx265-179 \
+    && \
+    ldconfig

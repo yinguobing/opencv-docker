@@ -16,7 +16,7 @@ Build a FFMPEG runtime image without any hardware accelerators. This will
 provide a minimal sized image.
 
 ```bash
-docker build -t yinguobing/ffmpeg:4.3.3-runtime-ubuntu20.04 -f ffmpeg .
+docker build -t yinguobing/ffmpeg:4.3.3-runtime-ubuntu20.04 -f ffmpeg-runtime .
 ```
 
 ### FFMPEG with CUDA development
