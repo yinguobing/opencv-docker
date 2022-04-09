@@ -4,6 +4,13 @@ Dockerfiles for OpenCV build.
 ## FFMPEG
 OpenCV depends on FFMPEG as it's video io backend.
 
+### FFMPEG development
+Build a FFMPEG development image without any hardware accelerators.
+
+```bash
+docker build -t yinguobing/ffmpeg:4.3.3-devel-ubuntu20.04 -f ffmpeg-devel .
+```
+
 ### FFMPEG runtime
 Build a FFMPEG runtime image without any hardware accelerators. This will 
 provide a minimal sized image.
