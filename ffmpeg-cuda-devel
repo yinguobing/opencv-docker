@@ -38,3 +38,6 @@ RUN \
     for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
     sed -i "s:${PREFIX}:/usr/local:g; s:/lib64:/lib:g" "$pc"; \
     done
+
+# 安装至系统目录
+RUN cp -r /build/ffmpeg-build/* /usr/local/ && ldconfig
