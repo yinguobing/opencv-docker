@@ -1,0 +1,24 @@
+# 构建阶段容器
+FROM yinguobing/opencv:4.5.4-devel-ubuntu20.04 as builder
+
+# 目标镜像
+FROM yinguobing/ffmpeg:4.3.3-runtime-ubuntu20.04
+LABEL image.authors="https://yinguobing.com"
+
+# 拷贝OpenCV
+COPY --from=builder /build/opencv-install/ /usr/local/
+
+# Envirouments
+ARG PIP_MIRROR=https://mirrors.cloud.tencent.com/pypi/simple
+
+# Install system packages and python packages
+RUN apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    libhdf5-dev \
+    libfreetype6 \
+    libharfbuzz0b \
+    && \
+    pip3 install -i ${PIP_MIRROR} numpy==1.22.1 \
+    && \
+    ldconfig

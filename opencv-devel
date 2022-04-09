@@ -1,0 +1,49 @@
+# Builder image
+FROM yinguobing/ffmpeg:4.3.3-devel-ubuntu20.04 as builder
+
+LABEL image.authors="https://yinguobing.com"
+
+# Envirouments
+ARG WORKDIR=/build
+ARG DEBIAN_FRONTEND=noninteractive
+ARG PIP_MIRROR=https://mirrors.cloud.tencent.com/pypi/simple
+ARG OPENCV_SRC=/build/opencv-4.5.4
+ARG OPENCV_CONTRIB=/build/opencv_contrib-4.5.4
+ARG OPENCV_EXTRA_MODULES=${OPENCV_CONTRIB}/modules
+ARG INSTALL_PREFIX=${WORKDIR}/opencv-install
+
+# Install system packages
+RUN apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    python3-dev \
+    libhdf5-dev \
+    libfreetype6 \
+    libharfbuzz0b
+
+# Install python packages
+RUN pip3 install -i ${PIP_MIRROR} numpy==1.22.1
+
+# Network proxy
+ENV HTTP_PROXY="http://172.31.96.131:12333"
+ENV HTTPS_PROXY="http://172.31.96.131:12333"
+
+# Get OpenCV source code
+RUN curl -SL https://github.com/opencv/opencv/archive/refs/tags/4.5.4.tar.gz | \
+    tar -xzf - -C .
+
+# Get OpenCV contrib modules
+RUN curl -SL https://github.com/opencv/opencv_contrib/archive/refs/tags/4.5.4.tar.gz | \
+    tar -xzf - -C .
+
+# Config the project
+RUN mkdir opencv-build && cd opencv-build
+RUN cmake \
+    -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
+    -DOPENCV_EXTRA_MODULES_PATH=${OPENCV_EXTRA_MODULES} \
+    -DBUILD_opencv_highgui=OFF -DWITH_GTK=OFF -DHIGHGUI_ENABLE_PLUGINS=OFF \
+    ${OPENCV_SRC}
+
+# Install OpenCV
+RUN  make -j$(nproc) && make install && cp -r /build/opencv-install/* /usr/local/
+RUN ldconfig

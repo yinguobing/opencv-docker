@@ -38,8 +38,25 @@ docker build -t yinguobing/ffmpeg:4.3.3-cuda_11.3.1-runtime-ubuntu20.04 -f ffmpe
 
 ## OpenCV
 
+### OpenCV development
+Build an OpenCV development image. This image will be usefull if you want to 
+build other libs based on OpenCV libs. Note there is no hardware acceleration 
+available in this image.
+
+```bash
+docker build -t yinguobing/opencv:4.5.4-devel-ubuntu20.04 -f opencv-devel .
+```
+
+### OpenCV runtime
+Build an OpenCV runtime image. This image could be used as a deployment base 
+image for your applications.
+
+```bash
+docker build -t yinguobing/opencv:4.5.4-runtime-ubuntu20.04 -f opencv-runtime .
+```
+
 ### OpenCV with CUDA development
-Build a OpenCV development image with NVIDIA CUDA support. This image will be 
+Build an OpenCV development image with NVIDIA CUDA support. This image will be 
 usefull if you want to build other libs based on OpenCV libs.
 
 ```bash
@@ -47,7 +64,7 @@ docker build -t yinguobing/opencv:4.5.4-cuda_11.3.1-devel-ubuntu20.04 -f opencv-
 ```
 
 ### OpenCV with CUDA runtime
-Build a OpenCV runtime image with NVIDIA CUDA support. This image could be used 
+Build an OpenCV runtime image with NVIDIA CUDA support. This image could be used 
 as a deployment base image for your applications.
 
 ```bash
