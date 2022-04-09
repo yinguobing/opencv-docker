@@ -38,3 +38,11 @@ usefull if you want to build other libs based on OpenCV libs.
 ```bash
 docker build -t yinguobing/opencv:4.5.4-cuda_11.3.1-devel-ubuntu20.04 -f opencv-cuda-devel .
 ```
+
+### OpenCV with CUDA runtime
+Build a OpenCV runtime image with NVIDIA CUDA support. This image could be used 
+as a deployment base image for your applications.
+
+```bash
+docker build -t yinguobing/opencv:4.5.4-cuda_11.3.1-runtime-ubuntu20.04 -f opencv-cuda-runtime .
+```
