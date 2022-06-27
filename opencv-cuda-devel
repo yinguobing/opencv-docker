@@ -1,5 +1,5 @@
 # Builder image
-FROM yinguobing/ffmpeg:4.3.3-cuda_11.3.1-devel-ubuntu20.04 as builder
+FROM yinguobing/ffmpeg:4.3.3-cuda11.4.3-devel-ubuntu20.04 as builder
 
 LABEL image.authors="https://yinguobing.com"
 
@@ -27,9 +27,9 @@ RUN apt-get install -y --no-install-recommends \
 # Install python packages
 RUN pip3 install -i ${PIP_MIRROR} numpy==1.22.1
 
-# Network proxy
-ENV HTTP_PROXY="http://172.31.96.131:12333"
-ENV HTTPS_PROXY="http://172.31.96.131:12333"
+# Network proxy incase of slow network
+# ENV HTTP_PROXY="http://172.31.96.131:1080"
+# ENV HTTPS_PROXY="http://172.31.96.131:1080"
 
 # Get OpenCV source code
 RUN curl -SL https://github.com/opencv/opencv/archive/refs/tags/4.5.4.tar.gz | \
@@ -39,11 +39,17 @@ RUN curl -SL https://github.com/opencv/opencv/archive/refs/tags/4.5.4.tar.gz | \
 RUN curl -SL https://github.com/opencv/opencv_contrib/archive/refs/tags/4.5.4.tar.gz | \
     tar -xzf - -C .
 
+# Download 3d-party files from a local cache
+ARG OPENCV_DOWNLOAD_CACHE=/build/opencv_dependencies-4.5.4
+RUN curl -SL http://172.31.92.251/static/opencv/opencv_dependencies-4.5.4.tar.gz | \
+    tar -xzf - -C .
+
 # Config the project
 RUN mkdir opencv-build && cd opencv-build
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
     -DOPENCV_EXTRA_MODULES_PATH=${OPENCV_EXTRA_MODULES} \
+    -DOPENCV_DOWNLOAD_PATH=${OPENCV_DOWNLOAD_CACHE} \
     -DWITH_CUDA=ON -DWITH_NVCUVID=ON \
     -DBUILD_opencv_highgui=OFF -DWITH_GTK=OFF -DHIGHGUI_ENABLE_PLUGINS=OFF \
     ${OPENCV_SRC}
