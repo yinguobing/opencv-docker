@@ -1,0 +1,12 @@
+# Builder image
+FROM yinguobing/opencv:4.5.4-devel-ubuntu20.04
+
+# Network proxy
+ENV HTTP_PROXY=""
+ENV HTTPS_PROXY=""
+
+# Install RUST
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+# Install Clang and libclang-dev
+RUN apt-get install -y --no-install-recommends clang libclang-dev
