@@ -1,5 +1,5 @@
 # Builder image
-FROM yinguobing/ffmpeg:4.3.3-cuda11.4.3-devel-ubuntu20.04 as builder
+FROM yinguobing/ffmpeg:4.3.3-cuda_11.8.0-devel-ubuntu20.04 as builder
 
 LABEL image.authors="https://yinguobing.com"
 
@@ -14,34 +14,31 @@ ARG INSTALL_PREFIX=${WORKDIR}/opencv-install
 
 # Install system packages
 RUN apt-get install -y --no-install-recommends \
-    curl \
     python3 \
     python3-pip \
     python3-dev \
     libhdf5-dev \
     libfreetype6 \
-    libharfbuzz0b \
-    build-essential \
-    cmake
+    libharfbuzz0b
 
 # Install python packages
 RUN pip3 install -i ${PIP_MIRROR} numpy==1.22.1
 
 # Network proxy incase of slow network
-# ENV HTTP_PROXY="http://172.31.96.131:1080"
-# ENV HTTPS_PROXY="http://172.31.96.131:1080"
+# ENV HTTP_PROXY="http://172.31.96.26:1080"
+# ENV HTTPS_PROXY="http://172.31.96.26:1080"
 
 # Get OpenCV source code
-RUN curl -SL https://github.com/opencv/opencv/archive/refs/tags/4.5.4.tar.gz | \
+RUN curl -SL http://172.31.100.101/static/opencv/opencv-4.5.4.tar.gz | \
     tar -xzf - -C .
 
 # Get OpenCV contrib modules
-RUN curl -SL https://github.com/opencv/opencv_contrib/archive/refs/tags/4.5.4.tar.gz | \
+RUN curl -SL http://172.31.100.101/static/opencv/opencv_contrib-4.5.4.tar.gz | \
     tar -xzf - -C .
 
 # Download 3d-party files from a local cache
 ARG OPENCV_DOWNLOAD_CACHE=/build/opencv_dependencies-4.5.4
-RUN curl -SL http://172.31.92.251/static/opencv/opencv_dependencies-4.5.4.tar.gz | \
+RUN curl -SL http://172.31.100.101/static/opencv/opencv_dependencies-4.5.4.tar.gz | \
     tar -xzf - -C .
 
 # Config the project
