@@ -7,14 +7,14 @@ LABEL image.authors="https://yinguobing.com"
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update APT sourece
-RUN sed -i 's/http:\/\/archive/http:\/\/cn.archive/' /etc/apt/sources.list && \
+RUN sed -i 's/http:\/\/archive.ubuntu/http:\/\/mirrors.huaweicloud/' /etc/apt/sources.list && \
     rm /etc/apt/sources.list.d/*.list && apt-get update
 
 WORKDIR /build
 
 # 编译启用CUDA支持的FFMPEG
-RUN apt-get install -y \
-    build-essential curl git nasm yasm cmake libtool libc6 libc6-dev unzip \
+RUN apt-get install -y --no-install-recommends \
+    curl git nasm yasm cmake libtool unzip \
     wget libnuma1 libnuma-dev libx264-dev libx265-dev pkg-config
 
 ARG NV_CODEC_VERSION=sdk/11.0

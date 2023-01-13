@@ -1,16 +1,16 @@
 # 构建阶段容器
-FROM yinguobing/ffmpeg:4.3.3-cuda11.4.3-devel-ubuntu20.04 as builder
+FROM yinguobing/ffmpeg:4.3.3-cuda_11.8.0-devel-ubuntu20.04 as builder
 
 
 # 目标镜像
-FROM nvidia/cuda:11.4.3-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu20.04
 LABEL image.authors="https://yinguobing.com"
 
 # 拷贝FFMPEG
 COPY --from=builder /build/ffmpeg-build/ /usr/local/
 
 # Update APT sourece
-RUN sed -i 's/http:\/\/archive/http:\/\/cn.archive/' /etc/apt/sources.list && \
+RUN sed -i 's/http:\/\/archive.ubuntu/http:\/\/mirrors.huaweicloud/' /etc/apt/sources.list && \
     rm /etc/apt/sources.list.d/*.list && apt-get update && \
     apt-get install --no-install-recommends -y libx264-155 libx265-179 && \
     ldconfig
