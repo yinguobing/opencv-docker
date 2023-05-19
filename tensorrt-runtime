@@ -1,0 +1,13 @@
+FROM ubuntu:20.04
+
+# Disable interactive mode.
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Update APT sourece
+RUN sed -i 's/http:\/\/archive/http:\/\/cn.archive/' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y curl && \
+    curl -sL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb -O && \
+    dpkg -i cuda-keyring_1.0-1_all.deb && rm cuda-keyring_1.0-1_all.deb && \
+    apt-get update && \
+    apt-get install -y tensorrt-libs

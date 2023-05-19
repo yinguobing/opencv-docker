@@ -1,9 +1,5 @@
 # Builder image
-FROM yinguobing/opencv:4.5.4-devel-ubuntu20.04
-
-# Network proxy
-ENV HTTP_PROXY=""
-ENV HTTPS_PROXY=""
+FROM yinguobing/opencv:4.5.4-devel-ubuntu22.04
 
 # Install RUST
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y

@@ -1,5 +1,8 @@
-# 构建阶段容器
-FROM ubuntu:20.04 as builder
+# Build like this: 
+# ```
+# docker build -t yinguobing/ffmpeg:4.3.3-devel-ubuntu22.04 -f ffmpeg-devel .
+# ```
+FROM ubuntu:22.04
 
 LABEL image.authors="https://yinguobing.com"
 
@@ -25,12 +28,12 @@ RUN curl -sSL https://ffmpeg.org/releases/ffmpeg-4.3.3.tar.xz | \
     --extra-libs=-lpthread \
     --disable-static --enable-shared --disable-ffplay --disable-doc \
     --enable-libx264 --enable-libx265 --enable-pic --enable-gpl --enable-nonfree && \
-    make -j15 && make install 
+    make -j $(nproc) && make install 
 
 RUN \
     for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
     sed -i "s:${PREFIX}:/usr/local:g; s:/lib64:/lib:g" "$pc"; \
     done
 
-# 拷贝FFMPEG
+# 拷贝FFMPEG。保留 build 目录以便于后期构建runtime镜像。
 RUN cp -r /build/ffmpeg-build/* /usr/local/ && ldconfig

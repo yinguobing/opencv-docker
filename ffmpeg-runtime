@@ -1,8 +1,12 @@
+# Build like this: 
+# ```
+# docker build -t yinguobing/ffmpeg:4.3.3-runtime-ubuntu22.04 -f ffmpeg-runtime .
+# ```
 # 构建阶段容器
-FROM yinguobing/ffmpeg:4.3.3-devel-ubuntu20.04 as builder
+FROM yinguobing/ffmpeg:4.3.3-devel-ubuntu22.04 as builder
 
 # 目标镜像
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 LABEL image.authors="https://yinguobing.com"
 
 # 拷贝FFMPEG
@@ -11,7 +15,7 @@ COPY --from=builder /build/ffmpeg-build/ /usr/local/
 # Update APT sourece
 RUN sed -i 's/http:\/\/archive/http:\/\/cn.archive/' /etc/apt/sources.list && \
     apt-get update && apt-get install --no-install-recommends -y \
-    libx264-155 \
-    libx265-179 \
+    libx264-163 \
+    libx265-199 \
     && \
     ldconfig
